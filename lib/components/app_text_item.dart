@@ -53,6 +53,31 @@ class _AppTextItemState extends State<AppTextItem> {
     );
   }
 
+  void _showDeleteDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Remover texto?'),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              Navigator.of(context).pop();
+              await Provider.of<AppTextList>(context, listen: false)
+                  .removeAppText(widget.appText);
+            },
+            child: const Text('Confirmar'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cancelar'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -75,8 +100,7 @@ class _AppTextItemState extends State<AppTextItem> {
             ),
             IconButton(
               onPressed: () async {
-                await Provider.of<AppTextList>(context, listen: false)
-                    .removeAppText(widget.appText);
+                _showDeleteDialog();
               },
               icon: const Icon(
                 Icons.delete,
